@@ -32,11 +32,6 @@ var SpacebookApp = function () {
     }
   }
 
-  // function addPost(newPost) {
-  //   posts.push({ text: newPost, comments: [] });
-  //   _renderPosts();
-  // }
-
   function addPost(newPost) {
 
     $.ajax(
@@ -84,18 +79,39 @@ var SpacebookApp = function () {
     });
   };
 
-  var addComment = function (newComment, postIndex) {
-    posts[postIndex].comments.push(newComment);
-    _renderComments(postIndex);
+  var addComment = function (newComment, postIndex, postID) {
+
+    $.ajax(
+      {
+        method: "POST",
+        url: "/posts/" + postID + '/comments',
+        data: newComment,
+        success: function (newComment) {
+          console.log(newComment);
+          fetch();
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      });
   };
 
+  var deleteComment = function (postIndex, commentIndex, commentID, pID) {
 
-  var deleteComment = function (postIndex, commentIndex) {
-    posts[postIndex].comments.splice(commentIndex, 1);
-    _renderComments(postIndex);
+    $.ajax({
+      method: 'DELETE',
+      url: '/posts/' + pID + '/comments/' + commentID,
 
+      success: function (data) {
+        console.log('success');
+        fetch();
+      },
+      error: function () {
+        console.log('error');
+
+      }
+    });
   };
-
   return {
     addPost: addPost,
     removePost: removePost,
@@ -130,7 +146,7 @@ $posts.on('click', '.toggle-comments', function () {
 });
 
 $posts.on('click', '.add-comment', function () {
-
+  var postID = $(this).parents('.post').data().id;
   var $comment = $(this).siblings('.comment');
   var $user = $(this).siblings('.name');
 
@@ -142,7 +158,7 @@ $posts.on('click', '.add-comment', function () {
   var postIndex = $(this).closest('.post').index();
   var newComment = { text: $comment.val(), user: $user.val() };
 
-  app.addComment(newComment, postIndex);
+  app.addComment(newComment, postIndex, postID);
 
   $comment.val("");
   $user.val("");
@@ -150,11 +166,13 @@ $posts.on('click', '.add-comment', function () {
 });
 
 $posts.on('click', '.remove-comment', function () {
+  var pID = $(this).parents('.post').data().id;
+  var commentID = $(this).parents('.comment').data().id;
   var $commentsList = $(this).closest('.post').find('.comments-list');
   var postIndex = $(this).closest('.post').index();
   var commentIndex = $(this).closest('.comment').index();
 
-  app.deleteComment(postIndex, commentIndex);
+  app.deleteComment(postIndex, commentIndex, commentID, pID);
 
 
 });
