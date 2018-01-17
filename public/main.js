@@ -40,9 +40,8 @@ var SpacebookApp = function () {
         url: "/posts",
         data: { 'text': newPost },
         success: function (newPost) {
-          console.log(newPost);
-          // posts.push(data);
-          _renderPosts();
+        console.log(newPost);
+        fetch();
         },
         error: function (err) {
           console.log('Error: ' + data);
@@ -86,9 +85,11 @@ var SpacebookApp = function () {
         method: "POST",
         url: "/posts/" + postID + '/comments',
         data: newComment,
-        success: function (newComment) {
+        success: function (data) {
           console.log(newComment);
-          fetch();
+          posts = data;
+          _renderComments(postIndex);
+          // $('.comments-container').toggleClass('show');
         },
         error: function (err) {
           console.log(err);

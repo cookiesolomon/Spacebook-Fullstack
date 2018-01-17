@@ -69,12 +69,18 @@ app.post('/posts/:id/comments', function (req, res) {
     }
 
     Post.findByIdAndUpdate(req.params.id, { $push: { comments: comment } }, function (err, post) {
-        if (!err) {
-            res.send(200);
-        } else {
-            res.send(data)
-            console.log("error adding comment");
-        }
+        // if (!err) {
+        //     res.send(200);
+        // } else {
+        //     res.send(err);
+        //     console.log("error adding comment");
+        // }
+        if(err) return console.log(err);
+        //retun all data after adding the comment //updated data 
+        Post.find(function(err,updatedData){
+            if(err) return commentID.log(err);
+            res.send(updatedData);
+        })
 
     });
 });
