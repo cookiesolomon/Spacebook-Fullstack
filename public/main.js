@@ -1,6 +1,6 @@
 var SpacebookApp = function () {
 
-  var posts = [];
+ 
 
   var $posts = $(".posts");
   var fetch = function () {
@@ -33,14 +33,16 @@ var SpacebookApp = function () {
   }
 
   function addPost(newPost) {
-
+    var posts = [];
     $.ajax(
       {
         method: "POST",
         url: "/posts",
         data: { 'text': newPost },
-        success: function (newPost) {
-        console.log(newPost);
+        success: function (data) {
+        console.log(data);
+        posts.push(data);
+        // _renderPosts(posts);
         fetch();
         },
         error: function (err) {

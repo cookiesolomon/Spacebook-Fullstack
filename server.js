@@ -20,11 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get("/posts", function (req, res) {
     Post.find((err, post) => {
         if (err) {
-            // Note that this error doesn't mean nothing was found,
-            // it means the database had an error while searching, hence the 500 status
             res.status(500).send(err)
         } else {
-            // send the list of all people
             res.status(200).send(post);
         }
     });
