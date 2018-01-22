@@ -9,7 +9,6 @@ var SpacebookApp = function () {
       method: "GET",
       success: function (data) {
         posts = data;
-        console.log(data);
         _renderPosts();
       },
       error: function (data) {
@@ -26,7 +25,6 @@ var SpacebookApp = function () {
     var template = Handlebars.compile(source);
     for (var i = 0; i < posts.length; i++) {
       var newHTML = template(posts[i]);
-      console.log(newHTML);
       $posts.append(newHTML);
       _renderComments(i);
     }
@@ -128,6 +126,8 @@ var app = SpacebookApp();
 
 $('#addpost').on('click', function () {
   var $input = $("#postText");
+  var myFile = $('.file').val();
+  console.log(myFile);
   if ($input.val() === "") {
     alert("Please enter text!");
   } else {

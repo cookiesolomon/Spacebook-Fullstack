@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var multer = require('multer');
+var upload = multer();
 
 mongoose.connect('mongodb://localhost/spacebookDB', function () {
     console.log("DB connection established!!!");
@@ -29,12 +31,13 @@ app.get("/posts", function (req, res) {
 });
 
 // 2) to handle adding a post
-app.post('/posts', function (req, res) {
+app.post('/posts',function (req, res) {
     var postItem = new Post({
         text: req.body.text,
         comments: []
 
     });
+    // var fileIMG = req.file;
     console.log(postItem);
     postItem.save(function (err, post) {
         if (err) {
@@ -44,6 +47,12 @@ app.post('/posts', function (req, res) {
     });
 
 });
+
+//adding a file
+// app.post('/posts', upload.single('photoField'), function (req, res, next) {
+//     // req.file is the file uploaded via the form's `photoField` 
+//     // req.body will hold the text fields, for example 'username'
+//   })
 
 // 3) to handle deleting a post
 app.delete('/posts/:id', function (req, res) {
@@ -97,6 +106,6 @@ app.delete('/posts/:postID/comments/:commentID', function (req, res) {
     });
 });
 
-app.listen(8000, function () {
+app.listen(process.env.PORT || '8000', function () {
     console.log("what do you want from me! get me on 8000 ;-)");
 });
