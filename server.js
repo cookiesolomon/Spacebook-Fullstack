@@ -1,12 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var multer = require('multer');
-var upload = multer();
+// var multer = require('multer');
+// var upload = multer();
 
-mongoose.connect('mongodb://localhost/spacebookDB', function () {
-    console.log("DB connection established!!!");
-})
+mongoose.connect(process.env.CONNECTION_STRING || 'mongodb://localhost/spacebookDB');
 
 var Post = require('./models/postModel');
 
@@ -106,6 +104,4 @@ app.delete('/posts/:postID/comments/:commentID', function (req, res) {
     });
 });
 
-app.listen(process.env.PORT || '8000', function () {
-    console.log("what do you want from me! get me on 8000 ;-)");
-});
+app.listen(process.env.PORT || '8000');
