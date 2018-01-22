@@ -60,10 +60,10 @@ var SpacebookApp = function () {
     }
   }
 
-  var removePost = function (index) {
+  var removePost = function (id) {
 
     $.ajax({
-      url: '/posts/' + $('.post').data().id,
+      url: '/posts/' + id,
       method: 'DELETE',
 
 
@@ -112,11 +112,11 @@ var SpacebookApp = function () {
   }
 
 
-  var deleteComment = function (postIndex, commentIndex, commentID, pID) {
+  var deleteComment = function (postID, commentID) {
 
     $.ajax({
       method: 'DELETE',
-      url: '/posts/' + pID + '/comments/' + commentID,
+      url: '/posts/' + postID + '/comments/' + commentID,
 
       success: function (data) {
         console.log('success');
@@ -155,8 +155,8 @@ $('#addpost').on('click', function () {
 var $posts = $(".posts");
 
 $posts.on('click', '.remove-post', function () {
-  var index = $(this).closest('.post').index();
-  app.removePost(index);
+  var id = $(this).parents('.post').data().id;
+  app.removePost(id);
 });
 
 $posts.on('click', '.toggle-comments', function () {
@@ -185,13 +185,14 @@ $posts.on('click', '.add-comment', function () {
 });
 
 $posts.on('click', '.remove-comment', function () {
-  var pID = $(this).parents('.post').data().id;
-  var commentID = $(this).parents('.comment').data().id;
-  var $commentsList = $(this).closest('.post').find('.comments-list');
-  var postIndex = $(this).closest('.post').index();
-  var commentIndex = $(this).closest('.comment').index();
+  var postID = $(this).parents('.post').data().id;
+  var commentID = $(this).closest('.comment').data().id;
+  // var commentID = $(this).parents('.comment').data().id;
+  // var $commentsList = $(this).closest('.post').find('.comments-list');
+  // var postIndex = $(this).closest('.post').index();
+  // var commentIndex = $(this).closest('.comment').index();
 
-  app.deleteComment(postIndex, commentIndex, commentID, pID);
+  app.deleteComment(postID,commentID);
 
 
 });
