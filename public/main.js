@@ -12,7 +12,7 @@ var SpacebookApp = function () {
         _renderPosts();
       },
       error: function (data) {
-        console.log('Error: ' + data);
+        console.log('Error');
       }
     });
   };
@@ -97,6 +97,21 @@ var SpacebookApp = function () {
       });
   };
 
+  function editPost(newPost, postID) {
+    $.ajax({
+      method: "PUT",
+      url: 'posts/' + postID,
+      data: { text: newPost },
+      success: function (data) {
+        fetch();
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(textStatus);
+      }
+    });
+  }
+
+
   var deleteComment = function (postIndex, commentIndex, commentID, pID) {
 
     $.ajax({
@@ -118,8 +133,9 @@ var SpacebookApp = function () {
     removePost: removePost,
     addComment: addComment,
     deleteComment: deleteComment,
+    editPost: editPost,
   };
-}
+};
 
 var app = SpacebookApp();
 
@@ -179,3 +195,21 @@ $posts.on('click', '.remove-comment', function () {
 
 
 });
+
+
+
+$posts.on('click', '.edit-post', function () {
+  var textPost = $(this).closest('.post').find('#postText').val();
+  var $input = $(this).siblings('.input-group').find('.edit-input').first();
+  $(this).siblings('.input-group').toggleClass('show');
+
+$input.val(textPost);
+$(this).closest('.post').find('#postText').text("");
+$(this).toggleClass('hide');
+})
+
+$posts.on('click', '.update-post', function () {
+  var postID = $(this).parents('.post').data().id;
+  var newPost = $(this).siblings('.edit-input').val();
+  app.editPost(newPost, postID);
+})

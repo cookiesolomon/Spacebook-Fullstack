@@ -88,6 +88,15 @@ app.post('/posts/:id/comments', function (req, res) {
 
     });
 });
+
+
+app.put('/posts/:id', function (req,res){
+    Post.findByIdAndUpdate(req.params.id, req.body,function(err,data){
+      if (err) throw error;
+      else{res.send(data)}
+    });
+  });
+  
 // // 5) to handle deleting a comment from a post
 
 app.delete('/posts/:postID/comments/:commentID', function (req, res) {
