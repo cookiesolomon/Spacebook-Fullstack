@@ -97,7 +97,7 @@ var SpacebookApp = function () {
       });
   };
 
-  function editPost(newPost, postID) {
+  var editPost = function(newPost, postID) {
     $.ajax({
       method: "PUT",
       url: 'posts/' + postID,
@@ -197,19 +197,14 @@ $posts.on('click', '.remove-comment', function () {
 });
 
 
-
-$posts.on('click', '.edit-post', function () {
-  var textPost = $(this).closest('.post').find('#postText').val();
-  var $input = $(this).siblings('.input-group').find('.edit-input').first();
-  $(this).siblings('.input-group').toggleClass('show');
-
-$input.val(textPost);
-$(this).closest('.post').find('#postText').text("");
-$(this).toggleClass('hide');
-})
-
 $posts.on('click', '.update-post', function () {
   var postID = $(this).parents('.post').data().id;
   var newPost = $(this).siblings('.edit-input').val();
   app.editPost(newPost, postID);
+  // $(this).siblings('.remove-post').find('.input-group').toggleClass('show');
+})
+
+$posts.on('click', '.edit-post', function(){
+  $(this).closest('.post').children('.input-group-edits').toggleClass('show');
+
 })
